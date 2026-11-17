@@ -1,6 +1,8 @@
 import uuid
 import string
 import random
+from datetime import timedelta
+from django.utils import timezone
 from django.db import models
 from django.contrib.auth.models import AbstractUser, BaseUserManager
 from django.utils.translation import gettext_lazy as _
@@ -115,6 +117,13 @@ class Grievance(models.Model):
         ('Kasaragod', 'Kasaragod'),
     ]
 
+    # SLA in days based on priority
+    SLA_DAYS = {
+        Priority.HIGH: 3,     # 3 days for High priority
+        Priority.MEDIUM: 7,   # 7 days for Medium priority
+        Priority.LOW: 14,     # 14 days for Low priority
+    }
+
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     reference_number = models.CharField(max_length=30, unique=True, default=generate_reference_number, db_index=True)
     citizen = models.ForeignKey(User, on_delete=models.CASCADE, related_name='grievances')
@@ -148,6 +157,7 @@ class Grievance(models.Model):
     ai_summary = models.TextField(blank=True)
     ai_suggested_action = models.TextField(blank=True)
     ai_raw_response = models.JSONField(null=True, blank=True)
+    potential_duplicates = models.JSONField(null=True, blank=True)
 
     # Administrative metadata
     is_escalated = models.BooleanField(default=False)
@@ -164,6 +174,20 @@ class Grievance(models.Model):
     def __str__(self):
         return f"{self.reference_number} - {self.subject} ({self.status})"
 
+    def is_overdue(self):
+        """
+        Calculates if the grievance is overdue based on official SLA rules:
+        - High priority: 3 calendar days
+        - Medium priority: 7 calendar days
+        - Low priority: 14 calendar days
+        Only non-resolved grievances can be overdue.
+        """
+        if self.status == self.Status.RESOLVED:
+            return False
+        sla_limit_days = self.SLA_DAYS.get(self.priority, 7)
+        deadline = self.created_at + timedelta(days=sla_limit_days)
+        return timezone.now() > deadline
+
 
 class Attachment(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
@@ -171,6 +195,7 @@ class Attachment(models.Model):
     file = models.FileField(upload_to='grievance_attachments/%Y/%m/')
     filename = models.CharField(max_length=255)
     file_type = models.CharField(max_length=50, blank=True)
+    file_size = models.PositiveIntegerField(default=0)
     uploaded_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):

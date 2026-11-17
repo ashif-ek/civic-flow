@@ -71,12 +71,19 @@ class UserProfileSerializer(serializers.ModelSerializer):
         read_only_fields = ['id', 'email', 'role', 'department', 'department_name']
 
 
+class DepartmentOfficerSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ['id', 'full_name', 'email', 'mobile_number']
+
+
 class DepartmentSerializer(serializers.ModelSerializer):
+    officers = DepartmentOfficerSerializer(many=True, read_only=True)
     officers_count = serializers.IntegerField(source='officers.count', read_only=True)
 
     class Meta:
         model = Department
-        fields = ['id', 'name', 'code', 'description', 'contact_email', 'contact_phone', 'is_active', 'officers_count']
+        fields = ['id', 'name', 'code', 'description', 'contact_email', 'contact_phone', 'is_active', 'officers_count', 'officers']
 
 
 class AttachmentSerializer(serializers.ModelSerializer):
@@ -124,6 +131,7 @@ class GrievanceDetailSerializer(serializers.ModelSerializer):
     history = GrievanceHistorySerializer(many=True, read_only=True)
     action_reports = ActionTakenReportSerializer(many=True, read_only=True)
     feedback = CitizenFeedbackSerializer(read_only=True)
+    is_overdue = serializers.SerializerMethodField()
 
     class Meta:
         model = Grievance
@@ -132,23 +140,30 @@ class GrievanceDetailSerializer(serializers.ModelSerializer):
             'district', 'category', 'subject', 'description', 'status', 'priority',
             'assigned_department', 'assigned_department_name', 'assigned_officer', 'assigned_officer_name',
             'ai_category', 'ai_suggested_department', 'ai_priority', 'ai_summary', 'ai_suggested_action',
-            'is_escalated', 'escalation_reason', 'cmo_remarks', 'attachments', 'history',
-            'action_reports', 'feedback', 'created_at', 'updated_at', 'resolved_at'
+            'potential_duplicates', 'is_escalated', 'escalation_reason', 'cmo_remarks', 'attachments', 'history',
+            'action_reports', 'feedback', 'created_at', 'updated_at', 'resolved_at', 'is_overdue'
         ]
+
+    def get_is_overdue(self, obj):
+        return obj.is_overdue()
 
 
 class GrievanceListSerializer(serializers.ModelSerializer):
     citizen_name = serializers.CharField(source='citizen.full_name', read_only=True)
     assigned_department_name = serializers.CharField(source='assigned_department.name', read_only=True)
     assigned_officer_name = serializers.CharField(source='assigned_officer.full_name', read_only=True)
+    is_overdue = serializers.SerializerMethodField()
 
     class Meta:
         model = Grievance
         fields = [
             'id', 'reference_number', 'citizen_name', 'district', 'category', 'subject',
             'status', 'priority', 'assigned_department', 'assigned_department_name',
-            'assigned_officer', 'assigned_officer_name', 'is_escalated', 'created_at', 'updated_at'
+            'assigned_officer', 'assigned_officer_name', 'is_escalated', 'is_overdue', 'created_at', 'updated_at'
         ]
+
+    def get_is_overdue(self, obj):
+        return obj.is_overdue()
 
 
 class GrievanceCreateSerializer(serializers.ModelSerializer):
