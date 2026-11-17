@@ -1,5 +1,5 @@
 import React from 'react';
-import { Shield, Target, Users, CheckCircle } from 'lucide-react';
+import { Shield, Target, Users, CheckCircle, Eye, Compass, Flag } from 'lucide-react';
 
 export const About: React.FC = () => {
   return (
@@ -19,28 +19,48 @@ export const About: React.FC = () => {
         </p>
       </div>
 
+      {/* Purpose, Vision, Mission, Objectives */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-3">
           <div className="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-700 flex items-center justify-center">
-            <Target className="w-5 h-5" />
+            <Compass className="w-5 h-5" />
           </div>
-          <h3 className="font-bold text-slate-900">Core Objectives</h3>
-          <ul className="text-xs text-slate-600 space-y-2">
-            <li className="flex items-center gap-2"><CheckCircle className="w-3.5 h-3.5 text-emerald-600" /> Provide citizens a direct channel to escalate civic bottlenecks.</li>
-            <li className="flex items-center gap-2"><CheckCircle className="w-3.5 h-3.5 text-emerald-600" /> Leverage Gemini AI for immediate triage and priority analysis.</li>
-            <li className="flex items-center gap-2"><CheckCircle className="w-3.5 h-3.5 text-emerald-600" /> Maintain unalterable audit histories across all status transitions.</li>
-          </ul>
+          <h3 className="font-bold text-slate-900 text-base">Our Purpose</h3>
+          <p className="text-xs text-slate-600 leading-relaxed">
+            To provide an accessible, responsive, and accountable grievance registration mechanism that bridges citizens directly with administrative decision-makers, eliminating paper bureaucracy and administrative delays.
+          </p>
         </div>
 
         <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-3">
           <div className="w-10 h-10 rounded-xl bg-blue-50 text-blue-700 flex items-center justify-center">
-            <Users className="w-5 h-5" />
+            <Eye className="w-5 h-5" />
           </div>
-          <h3 className="font-bold text-slate-900">Accountability Structure</h3>
-          <ul className="text-xs text-slate-600 space-y-2">
-            <li className="flex items-center gap-2"><CheckCircle className="w-3.5 h-3.5 text-emerald-600" /> Chief Minister's Office acts as the central review authority.</li>
-            <li className="flex items-center gap-2"><CheckCircle className="w-3.5 h-3.5 text-emerald-600" /> Dedicated field officer assignments with mandatory action reports.</li>
-            <li className="flex items-center gap-2"><CheckCircle className="w-3.5 h-3.5 text-emerald-600" /> Citizen verification and satisfaction scoring prior to closing.</li>
+          <h3 className="font-bold text-slate-900 text-base">Our Vision</h3>
+          <p className="text-xs text-slate-600 leading-relaxed">
+            A state-wide civic governance model where every public concern—from hazardous potholes to drinking water disruptions—is transparently monitored, rapidly investigated, and verified by citizens upon completion.
+          </p>
+        </div>
+
+        <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-3">
+          <div className="w-10 h-10 rounded-xl bg-purple-50 text-purple-700 flex items-center justify-center">
+            <Flag className="w-5 h-5" />
+          </div>
+          <h3 className="font-bold text-slate-900 text-base">Our Mission</h3>
+          <p className="text-xs text-slate-600 leading-relaxed">
+            Harnessing cutting-edge artificial intelligence to automate complaint triage, enforce strict Service Level Agreements (SLAs), and empower field departments with actionable, verifiable resolution protocols.
+          </p>
+        </div>
+
+        <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-3">
+          <div className="w-10 h-10 rounded-xl bg-amber-50 text-amber-700 flex items-center justify-center">
+            <Target className="w-5 h-5" />
+          </div>
+          <h3 className="font-bold text-slate-900 text-base">Core Objectives</h3>
+          <ul className="text-xs text-slate-600 space-y-1.5">
+            <li className="flex items-center gap-2"><CheckCircle className="w-3.5 h-3.5 text-emerald-600 flex-shrink-0" /> Immediate triage and priority suggestion via Gemini AI.</li>
+            <li className="flex items-center gap-2"><CheckCircle className="w-3.5 h-3.5 text-emerald-600 flex-shrink-0" /> Real-time SLA tracking (3-day, 7-day, 14-day deadlines).</li>
+            <li className="flex items-center gap-2"><CheckCircle className="w-3.5 h-3.5 text-emerald-600 flex-shrink-0" /> Chief Minister's Office direct oversight & case escalation.</li>
+            <li className="flex items-center gap-2"><CheckCircle className="w-3.5 h-3.5 text-emerald-600 flex-shrink-0" /> Citizen post-resolution satisfaction verification (1–5 stars).</li>
           </ul>
         </div>
       </div>

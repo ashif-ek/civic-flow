@@ -1,3 +1,4 @@
+from datetime import timedelta
 from django.utils import timezone
 from rest_framework import generics, status, views
 from rest_framework.response import Response
@@ -17,6 +18,10 @@ from .serializers import (
 )
 from .permissions import IsCitizen, IsCMOAdmin, IsDepartmentOfficer, IsAdminOrOfficer
 from .gemini_service import analyze_grievance_with_gemini
+
+# Allowed mime types and max size (10 MB)
+ALLOWED_FILE_TYPES = ['image/jpeg', 'image/png', 'image/jpg', 'application/pdf', 'image/webp']
+MAX_FILE_SIZE = 10 * 1024 * 1024
 
 
 # Auth Views
@@ -52,11 +57,22 @@ class AIAnalyzeView(views.APIView):
     def post(self, request):
         description = request.data.get('description', '').strip()
         subject = request.data.get('subject', '').strip()
+        district = request.data.get('district', '').strip()
 
         if not description:
             return Response({'error': 'Description is required for analysis.'}, status=status.HTTP_400_BAD_REQUEST)
 
-        analysis = analyze_grievance_with_gemini(description=description, subject=subject)
+        # Retrieve recent grievances in the same district to detect duplicate issues
+        recent_qs = Grievance.objects.all()
+        if district:
+            recent_qs = recent_qs.filter(district=district)
+        recent_list = list(recent_qs.order_by('-created_at')[:5].values('reference_number', 'subject', 'category'))
+
+        analysis = analyze_grievance_with_gemini(
+            description=description,
+            subject=subject,
+            recent_grievances=recent_list
+        )
         return Response(analysis, status=status.HTTP_200_OK)
 
 
@@ -73,11 +89,21 @@ class CitizenGrievanceListCreateView(generics.ListCreateAPIView):
         return Grievance.objects.filter(citizen=self.request.user)
 
     def perform_create(self, serializer):
-        # Trigger Gemini AI analysis during creation
         description = serializer.validated_data.get('description', '')
         subject = serializer.validated_data.get('subject', '')
-        
-        ai_data = analyze_grievance_with_gemini(description=description, subject=subject)
+        district = serializer.validated_data.get('district', '')
+
+        # Check recent complaints for duplicate triage
+        recent_list = list(
+            Grievance.objects.filter(district=district)
+            .order_by('-created_at')[:5]
+            .values('reference_number', 'subject')
+        )
+        ai_data = analyze_grievance_with_gemini(
+            description=description,
+            subject=subject,
+            recent_grievances=recent_list
+        )
         
         grievance = serializer.save(
             citizen=self.request.user,
@@ -88,10 +114,10 @@ class CitizenGrievanceListCreateView(generics.ListCreateAPIView):
             ai_priority=ai_data.get('priority', ''),
             ai_summary=ai_data.get('summary', ''),
             ai_suggested_action=ai_data.get('suggested_action', ''),
-            ai_raw_response=ai_data
+            ai_raw_response=ai_data,
+            potential_duplicates=ai_data.get('potential_duplicate_refs', [])
         )
 
-        # Create initial history log
         GrievanceHistory.objects.create(
             grievance=grievance,
             previous_status='',
@@ -122,7 +148,7 @@ class PublicGrievanceTrackingView(views.APIView):
             return Response({'error': 'Grievance not found with the provided reference number.'}, status=status.HTTP_404_NOT_FOUND)
 
 
-# Attachment Upload
+# Attachment Upload with validation
 class AttachmentUploadView(views.APIView):
     permission_classes = [IsAuthenticated]
 
@@ -132,7 +158,6 @@ class AttachmentUploadView(views.APIView):
         except Grievance.DoesNotExist:
             return Response({'error': 'Grievance not found.'}, status=status.HTTP_404_NOT_FOUND)
 
-        # Check permission: citizen owner or admin or assigned officer
         if request.user.role == User.Role.CITIZEN and grievance.citizen != request.user:
             return Response({'error': 'Not authorized.'}, status=status.HTTP_403_FORBIDDEN)
 
@@ -140,11 +165,21 @@ class AttachmentUploadView(views.APIView):
         if not file:
             return Response({'error': 'No file provided.'}, status=status.HTTP_400_BAD_REQUEST)
 
+        # File size check (max 10MB)
+        if file.size > MAX_FILE_SIZE:
+            return Response({'error': 'File size exceeds maximum permitted limit of 10MB.'}, status=status.HTTP_400_BAD_REQUEST)
+
+        # File type check
+        content_type = getattr(file, 'content_type', '')
+        if content_type and content_type.lower() not in ALLOWED_FILE_TYPES:
+            return Response({'error': 'Unsupported file format. Please upload JPG, PNG, WEBP, or PDF files only.'}, status=status.HTTP_400_BAD_REQUEST)
+
         attachment = Attachment.objects.create(
             grievance=grievance,
             file=file,
             filename=file.name,
-            file_type=file.content_type if hasattr(file, 'content_type') else ''
+            file_type=content_type,
+            file_size=file.size
         )
 
         return Response(AttachmentSerializer(attachment).data, status=status.HTTP_201_CREATED)
@@ -178,6 +213,7 @@ class CMODashboardStatsView(views.APIView):
     permission_classes = [IsCMOAdmin]
 
     def get(self, request):
+        now = timezone.now()
         total_grievances = Grievance.objects.count()
         pending_grievances = Grievance.objects.filter(
             status__in=[Grievance.Status.SUBMITTED, Grievance.Status.UNDER_REVIEW, Grievance.Status.IN_PROGRESS, Grievance.Status.REOPENED]
@@ -185,27 +221,36 @@ class CMODashboardStatsView(views.APIView):
         resolved_grievances = Grievance.objects.filter(status=Grievance.Status.RESOLVED).count()
         escalated_grievances = Grievance.objects.filter(is_escalated=True).count()
 
-        # District-wise breakdown
+        # Overdue Count based on priority SLA rules (High: 3d, Medium: 7d, Low: 14d)
+        high_deadline = now - timedelta(days=Grievance.SLA_DAYS[Grievance.Priority.HIGH])
+        med_deadline = now - timedelta(days=Grievance.SLA_DAYS[Grievance.Priority.MEDIUM])
+        low_deadline = now - timedelta(days=Grievance.SLA_DAYS[Grievance.Priority.LOW])
+
+        overdue_grievances = Grievance.objects.filter(
+            ~Q(status=Grievance.Status.RESOLVED) & (
+                (Q(priority=Grievance.Priority.HIGH) & Q(created_at__lt=high_deadline)) |
+                (Q(priority=Grievance.Priority.MEDIUM) & Q(created_at__lt=med_deadline)) |
+                (Q(priority=Grievance.Priority.LOW) & Q(created_at__lt=low_deadline))
+            )
+        ).count()
+
         district_stats = list(
             Grievance.objects.values('district')
             .annotate(count=Count('id'))
             .order_by('-count')
         )
 
-        # Department-wise breakdown
         department_stats = list(
             Department.objects.annotate(count=Count('assigned_grievances'))
             .values('name', 'count')
             .order_by('-count')
         )
 
-        # Priority breakdown
         priority_stats = list(
             Grievance.objects.values('priority')
             .annotate(count=Count('id'))
         )
 
-        # Status breakdown
         status_stats = list(
             Grievance.objects.values('status')
             .annotate(count=Count('id'))
@@ -216,6 +261,7 @@ class CMODashboardStatsView(views.APIView):
             'pending_grievances': pending_grievances,
             'resolved_grievances': resolved_grievances,
             'escalated_grievances': escalated_grievances,
+            'overdue_grievances': overdue_grievances,
             'district_stats': district_stats,
             'department_stats': department_stats,
             'priority_stats': priority_stats,
@@ -233,6 +279,7 @@ class CMOGrievanceListView(generics.ListAPIView):
         category = self.request.query_params.get('category')
         priority = self.request.query_params.get('priority')
         status_param = self.request.query_params.get('status')
+        overdue_param = self.request.query_params.get('overdue')
         search = self.request.query_params.get('search')
 
         if district:
@@ -248,6 +295,19 @@ class CMOGrievanceListView(generics.ListAPIView):
                 Q(reference_number__icontains=search) |
                 Q(subject__icontains=search) |
                 Q(description__icontains=search)
+            )
+
+        if overdue_param == 'true':
+            now = timezone.now()
+            high_deadline = now - timedelta(days=Grievance.SLA_DAYS[Grievance.Priority.HIGH])
+            med_deadline = now - timedelta(days=Grievance.SLA_DAYS[Grievance.Priority.MEDIUM])
+            low_deadline = now - timedelta(days=Grievance.SLA_DAYS[Grievance.Priority.LOW])
+            queryset = queryset.filter(
+                ~Q(status=Grievance.Status.RESOLVED) & (
+                    (Q(priority=Grievance.Priority.HIGH) & Q(created_at__lt=high_deadline)) |
+                    (Q(priority=Grievance.Priority.MEDIUM) & Q(created_at__lt=med_deadline)) |
+                    (Q(priority=Grievance.Priority.LOW) & Q(created_at__lt=low_deadline))
+                )
             )
 
         return queryset
@@ -296,7 +356,6 @@ class CMOAssignGrievanceView(views.APIView):
             grievance.priority = priority
         grievance.save()
 
-        # Create assignment record
         DepartmentAssignment.objects.create(
             grievance=grievance,
             department=dept,
@@ -305,7 +364,6 @@ class CMOAssignGrievanceView(views.APIView):
             instructions=instructions
         )
 
-        # Log history
         remarks = f"Assigned to {dept.name}"
         if officer:
             remarks += f" (Officer: {officer.full_name})"
@@ -335,6 +393,7 @@ class CMOUpdateStatusView(views.APIView):
         new_status = request.data.get('status')
         remarks = request.data.get('remarks', '')
 
+        # Valid transitions from CMO: Resolved, Reopened, In Progress
         if new_status not in [Grievance.Status.RESOLVED, Grievance.Status.REOPENED, Grievance.Status.IN_PROGRESS]:
             return Response({'error': f'Invalid status transition: {new_status}'}, status=status.HTTP_400_BAD_REQUEST)
 
@@ -432,9 +491,9 @@ class OfficerUpdateStatusView(views.APIView):
         new_status = request.data.get('status')
         remarks = request.data.get('remarks', '')
 
-        # Officers can update to In Progress or Under Review
+        # Enforce valid workflow transitions: Officers can only mark Under Review or In Progress
         if new_status not in [Grievance.Status.IN_PROGRESS, Grievance.Status.UNDER_REVIEW]:
-            return Response({'error': 'Officers can only set status to In Progress or Under Review. Use Action Report for resolution recommendation.'}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({'error': 'Officers can only set status to In Progress or Under Review. Final resolution must be approved by CMO via Action-Taken Report.'}, status=status.HTTP_400_BAD_REQUEST)
 
         prev_status = grievance.status
         grievance.status = new_status
@@ -467,6 +526,8 @@ class OfficerSubmitActionReportView(views.APIView):
         investigation_summary = request.data.get('investigation_summary', '').strip()
         action_taken = request.data.get('action_taken', '').strip()
         field_visit_conducted = request.data.get('field_visit_conducted', False)
+        if isinstance(field_visit_conducted, str):
+            field_visit_conducted = field_visit_conducted.lower() in ('true', '1', 't')
         evidence_doc = request.FILES.get('evidence_document')
 
         if not investigation_summary or not action_taken:
@@ -481,13 +542,12 @@ class OfficerSubmitActionReportView(views.APIView):
             evidence_document=evidence_doc
         )
 
-        # Log history
         GrievanceHistory.objects.create(
             grievance=grievance,
             previous_status=grievance.status,
             new_status=grievance.status,
             changed_by=officer,
-            remarks=f"Action Taken Report submitted by Officer {officer.full_name}. Awaiting CMO review."
+            remarks=f"Action-Taken Report submitted by Officer {officer.full_name}. Awaiting CMO review."
         )
 
         return Response(ActionTakenReportSerializer(report).data, status=status.HTTP_201_CREATED)

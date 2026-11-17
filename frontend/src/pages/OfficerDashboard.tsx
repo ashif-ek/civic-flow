@@ -3,7 +3,7 @@ import api from '../services/api';
 import { useAuth } from '../context/AuthContext';
 import {
   FileText, CheckCircle, Clock, AlertCircle, ChevronRight,
-  Shield, Send, MapPin, CheckSquare, Upload
+  Shield, Send, MapPin, CheckSquare, Upload, Paperclip
 } from 'lucide-react';
 
 export const OfficerDashboard: React.FC = () => {
@@ -151,7 +151,12 @@ export const OfficerDashboard: React.FC = () => {
               <tbody className="divide-y divide-slate-100">
                 {grievances.map((g) => (
                   <tr key={g.id} className="hover:bg-slate-50 transition cursor-pointer" onClick={() => openDetails(g.id)}>
-                    <td className="py-3 px-4 font-mono font-medium text-emerald-800">{g.reference_number}</td>
+                    <td className="py-3 px-4 font-mono font-medium text-emerald-800">
+                      {g.reference_number}
+                      {g.is_overdue && (
+                        <span className="ml-1.5 text-[10px] font-bold px-1.5 py-0.2 bg-rose-100 text-rose-800 rounded">OVERDUE</span>
+                      )}
+                    </td>
                     <td className="py-3 px-4 text-slate-800 font-medium">{g.citizen_name}</td>
                     <td className="py-3 px-4 text-slate-600">{g.district}</td>
                     <td className="py-3 px-4 text-slate-900 max-w-xs truncate">{g.subject}</td>
@@ -210,6 +215,29 @@ export const OfficerDashboard: React.FC = () => {
                 {selectedGrievance.description}
               </p>
             </div>
+
+            {/* Attachments */}
+            {selectedGrievance.attachments && selectedGrievance.attachments.length > 0 && (
+              <div className="space-y-2">
+                <h4 className="text-xs font-bold uppercase tracking-wider text-slate-500 flex items-center gap-1.5">
+                  <Paperclip className="w-3.5 h-3.5" /> Citizen Attachments
+                </h4>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
+                  {selectedGrievance.attachments.map((att: any) => (
+                    <a
+                      key={att.id}
+                      href={att.file}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="p-2.5 bg-slate-50 hover:bg-slate-100 border border-slate-200 rounded-lg flex items-center justify-between text-emerald-800 font-medium truncate"
+                    >
+                      <span className="truncate">{att.filename}</span>
+                      <span className="text-[10px] text-slate-400 ml-2">Open File</span>
+                    </a>
+                  ))}
+                </div>
+              </div>
+            )}
 
             {/* Officer Action Bar */}
             <div className="bg-slate-50 p-4 rounded-xl border border-slate-200 space-y-3">
