@@ -4,37 +4,29 @@ An autonomous, end-to-end recruitment machine-test assignment delivering a funct
 
 ---
 
-## 🌐 Live Hosted Application Links
+## 🌐 Live Hosted Links
 
 - **Frontend Application (Vercel)**: [https://civicflow-v1.vercel.app/](https://civicflow-v1.vercel.app/)
 - **Backend API & Swagger Documentation (Railway)**: [https://civicflow-backend-production.up.railway.app/api/docs/](https://civicflow-backend-production.up.railway.app/api/docs/)
+- **ReDoc Interactive Reference**: [https://civicflow-backend-production.up.railway.app/api/redoc/](https://civicflow-backend-production.up.railway.app/api/redoc/)
+
+---
+
+## 🔑 Demonstration Login Credentials (Pre-Seeded)
+
+Use the credentials below on [https://civicflow-v1.vercel.app/login](https://civicflow-v1.vercel.app/login) (or click the quick-fill buttons on the login page):
+
+| Role | Email / Username | Password | Access Rights & Dashboard Scope |
+|---|---|---|---|
+| **CMO Administrator** | `cmo.admin@civicflow.gov.in` | `Admin@123` | **Apex Console**: State-wide KPI metrics, SLA overdue alerts, assign departments & officers, approve resolutions, reopen cases |
+| **PWD Department Officer** | `officer.pwd@civicflow.gov.in` | `Officer@123` | **Officer Desk**: Public Works complaints, update status (*In Progress*), submit formal Action-Taken Reports with inspection proof |
+| **KWA Department Officer** | `officer.kwa@civicflow.gov.in` | `Officer@123` | **Officer Desk**: Kerala Water Authority complaints & field inspection reporting |
+| **Citizen User** | `citizen.rajesh@gmail.com` | `Citizen@123` | **Citizen Portal**: File new complaints, AI triage recommendations, track status history, submit 5-star resolution feedback |
 
 ---
 
 ### Important Notice
 > **Recruitment Prototype Disclaimer**: This project is an independent demonstration created for recruitment evaluation. It is not officially affiliated with or endorsed by the Government of Kerala.
-
----
-
-## 🏛️ System Features
-- **Public Portal**: Home, About (Purpose, Vision, Mission, Objectives), How It Works, Departments, Public Tracker, Contact Us, and FAQ pages.
-- **Citizen Portal**: Secure JWT authentication, 14-district grievance submission, image uploads with 10MB limits, real-time audit trails, and 5-star resolution feedback.
-- **AI Grievance Assistant**: Google Gemini API powered triage recommending category, department, priority, executive summary, and actionable next steps with duplicate detection and resilient fallback handling.
-- **CMO Administrator Apex Console**: Real-time KPI metrics calculated directly from PostgreSQL, SLA overdue monitoring (3d/7d/14d), district/priority charts via Recharts, multi-filter grievance tables, department & officer routing, case escalations, and resolution approvals.
-- **Department Officer Console**: Role-restricted access, investigation progress logging, and formal Action-Taken Report filings with site visit verifications.
-- **Public Audit Tracker**: Lightweight, privacy-preserving tracking by reference number (`KL-GRV-XXXXXX`) exposing no personal citizen data.
-- **Interactive API Documentation**: Live Swagger UI at `/api/docs/` and ReDoc at `/api/redoc/`.
-
----
-
-## 🚀 Live Hosted Credentials (Neon PostgreSQL)
-
-| Role | Email | Password | Access Rights & Scope |
-|---|---|---|---|
-| **CMO Admin** | `cmo.admin@civicflow.gov.in` | `Admin@123` | Full administrative control, officer routing & closure |
-| **PWD Officer** | `officer.pwd@civicflow.gov.in` | `Officer@123` | Public Works Department Desk, investigation & action reports |
-| **KWA Officer** | `officer.kwa@civicflow.gov.in` | `Officer@123` | Kerala Water Authority Desk |
-| **Citizen** | `citizen.rajesh@gmail.com` | `Citizen@123` | Citizen grievance submissions & 5-star feedback |
 
 ---
 
