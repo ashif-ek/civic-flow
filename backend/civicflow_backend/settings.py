@@ -53,7 +53,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-ROOT_URLCONF = 'config.urls'
+ROOT_URLCONF = 'civicflow_backend.urls'
 
 TEMPLATES = [
     {
@@ -71,7 +71,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'config.wsgi.application'
+WSGI_APPLICATION = 'civicflow_backend.wsgi.application'
 
 # Database
 # Use PostgreSQL if DATABASE_URL is set, otherwise fallback to SQLite for local development
@@ -167,10 +167,26 @@ SIMPLE_JWT = {
 }
 
 # CORS Configuration
-CORS_ALLOW_ALL_ORIGINS = DEBUG
+CORS_ALLOW_ALL_ORIGINS = True
+CORS_ALLOW_CREDENTIALS = True
+ALLOWED_HOSTS = ['*']
+
 cors_origins_env = os.getenv('CORS_ALLOWED_ORIGINS', '')
-if cors_origins_env and not DEBUG:
-    CORS_ALLOWED_ORIGINS = [orig.strip() for orig in cors_origins_env.split(',') if orig.strip()]
+CORS_ALLOWED_ORIGINS = [
+    'http://localhost:5173',
+    'http://127.0.0.1:5173',
+    'http://localhost:3000',
+    'https://civicflow-v1.vercel.app',
+    'https://civicflow.vercel.app',
+]
+if cors_origins_env:
+    CORS_ALLOWED_ORIGINS.extend([orig.strip() for orig in cors_origins_env.split(',') if orig.strip()])
+
+CSRF_TRUSTED_ORIGINS = [
+    'https://civicflow-v1.vercel.app',
+    'https://civicflow.vercel.app',
+    'https://civicflow-backend-production.up.railway.app',
+]
 
 # Gemini API Key
 GEMINI_API_KEY = os.getenv('GEMINI_API_KEY', '')
