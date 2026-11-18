@@ -1,7 +1,13 @@
 import axios from 'axios';
 
+// Use explicit Railway backend URL in production, or fallback to relative /api for local dev proxy
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 
+  (window.location.hostname.includes('vercel.app') 
+    ? 'https://civicflow-backend-production.up.railway.app/api' 
+    : '/api');
+
 const api = axios.create({
-  baseURL: import.meta.env.VITE_API_BASE_URL || '/api',
+  baseURL: API_BASE_URL,
 });
 
 api.interceptors.request.use((config) => {
