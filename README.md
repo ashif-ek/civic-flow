@@ -140,3 +140,7 @@ Full architectural and deployment documentation is available in `DOCUMENTATION/`
 ### 4. Department Officer Investigation & Field Report Desk
 ![Department Officer Desk](./frontend/public/screenshot-officer.png)
 
+### 5. Grievance Tracking, Status Audit & Redressal Protocol
+![Grievance Tracking & Status Audit](./frontend/public/screenshot-track.png)
+
+
