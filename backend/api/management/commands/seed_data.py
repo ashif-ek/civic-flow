@@ -50,9 +50,9 @@ class Command(BaseCommand):
                 "is_superuser": True
             }
         )
-        cmo_user.set_password("Admin@123")
+        cmo_user.set_password("qwertyuiop1234567890")
         cmo_user.save()
-        self.stdout.write(f" - CMO Admin: {cmo_email} / Admin@123")
+        self.stdout.write(f" - CMO Admin: {cmo_email} / qwertyuiop1234567890")
 
         # 2. Department Officer (PWD)
         pwd_dept = departments.get("PWD")
@@ -67,9 +67,9 @@ class Command(BaseCommand):
             }
         )
         pwd_officer.department = pwd_dept
-        pwd_officer.set_password("Officer@123")
+        pwd_officer.set_password("qwertyuiop1234567890")
         pwd_officer.save()
-        self.stdout.write(f" - PWD Officer: {pwd_officer_email} / Officer@123")
+        self.stdout.write(f" - PWD Officer: {pwd_officer_email} / qwertyuiop1234567890")
 
         # 3. Department Officer (KWA)
         kwa_dept = departments.get("KWA")
@@ -84,9 +84,9 @@ class Command(BaseCommand):
             }
         )
         kwa_officer.department = kwa_dept
-        kwa_officer.set_password("Officer@123")
+        kwa_officer.set_password("qwertyuiop1234567890")
         kwa_officer.save()
-        self.stdout.write(f" - KWA Officer: {kwa_officer_email} / Officer@123")
+        self.stdout.write(f" - KWA Officer: {kwa_officer_email} / qwertyuiop1234567890")
 
         # 4. Citizen
         citizen_email = "citizen.rajesh@gmail.com"
@@ -98,9 +98,9 @@ class Command(BaseCommand):
                 "role": User.Role.CITIZEN
             }
         )
-        citizen_user.set_password("Citizen@123")
+        citizen_user.set_password("qwertyuiop1234567890")
         citizen_user.save()
-        self.stdout.write(f" - Citizen User: {citizen_email} / Citizen@123")
+        self.stdout.write(f" - Citizen User: {citizen_email} / qwertyuiop1234567890")
 
         # Create demo grievance for immediate walkthrough
         demo_ref = "KL-GRV-DEMO01"

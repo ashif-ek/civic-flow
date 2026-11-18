@@ -18,10 +18,10 @@ Use the credentials below on [https://civicflow-v1.vercel.app/login](https://civ
 
 | Role | Email / Username | Password | Access Rights & Dashboard Scope |
 |---|---|---|---|
-| **CMO Administrator** | `cmo.admin@civicflow.gov.in` | `Admin@123` | **Apex Console**: State-wide KPI metrics, SLA overdue alerts, assign departments & officers, approve resolutions, reopen cases |
-| **PWD Department Officer** | `officer.pwd@civicflow.gov.in` | `Officer@123` | **Officer Desk**: Public Works complaints, update status (*In Progress*), submit formal Action-Taken Reports with inspection proof |
-| **KWA Department Officer** | `officer.kwa@civicflow.gov.in` | `Officer@123` | **Officer Desk**: Kerala Water Authority complaints & field inspection reporting |
-| **Citizen User** | `citizen.rajesh@gmail.com` | `Citizen@123` | **Citizen Portal**: File new complaints, AI triage recommendations, track status history, submit 5-star resolution feedback |
+| **CMO Administrator** | `cmo.admin@civicflow.gov.in` | `qwertyuiop1234567890` | **Apex Console**: State-wide KPI metrics, SLA overdue alerts, assign departments & officers, approve resolutions, reopen cases |
+| **PWD Department Officer** | `officer.pwd@civicflow.gov.in` | `qwertyuiop1234567890` | **Officer Desk**: Public Works complaints, update status (*In Progress*), submit formal Action-Taken Reports with inspection proof |
+| **KWA Department Officer** | `officer.kwa@civicflow.gov.in` | `qwertyuiop1234567890` | **Officer Desk**: Kerala Water Authority complaints & field inspection reporting |
+| **Citizen User** | `citizen.rajesh@gmail.com` | `qwertyuiop1234567890` | **Citizen Portal**: File new complaints, AI triage recommendations, track status history, submit 5-star resolution feedback |
 
 ---
 

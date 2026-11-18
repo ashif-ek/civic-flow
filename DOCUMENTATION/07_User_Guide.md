@@ -4,10 +4,10 @@
 
 | Role | Email | Password | Access |
 |---|---|---|---|
-| **CMO Administrator** | `cmo.admin@civicflow.gov.in` | `Admin@123` | Full state-wide apex console, department routing, case closure |
-| **PWD Officer** | `officer.pwd@civicflow.gov.in` | `Officer@123` | Public Works complaints, investigation logs, action reports |
-| **KWA Officer** | `officer.kwa@civicflow.gov.in` | `Officer@123` | Water Authority complaints |
-| **Citizen** | `citizen.rajesh@gmail.com` | `Citizen@123` | Submit complaints, monitor status, rate resolution |
+| **CMO Administrator** | `cmo.admin@civicflow.gov.in` | `qwertyuiop1234567890` | Full state-wide apex console, department routing, case closure |
+| **PWD Officer** | `officer.pwd@civicflow.gov.in` | `qwertyuiop1234567890` | Public Works complaints, investigation logs, action reports |
+| **KWA Officer** | `officer.kwa@civicflow.gov.in` | `qwertyuiop1234567890` | Water Authority complaints |
+| **Citizen** | `citizen.rajesh@gmail.com` | `qwertyuiop1234567890` | Submit complaints, monitor status, rate resolution |
 
 ### Step-by-Step Demonstration Workflow
 1. **Login as Citizen Rajesh**:

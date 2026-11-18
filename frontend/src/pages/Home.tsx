@@ -2,38 +2,134 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import {
   Shield, CheckCircle2, ArrowRight, Clock, Award,
-  Cpu, FileCheck, Layers, HelpCircle, PhoneCall
+  Cpu, FileCheck, Layers, HelpCircle, PhoneCall,
+  Landmark, Sparkles, Building, ArrowUpRight, Scale
 } from 'lucide-react';
 
 export const Home: React.FC = () => {
   return (
-    <div className="space-y-16 py-8">
-      {/* Hero Section */}
+    <div className="space-y-16 py-6 sm:py-10">
+      {/* Editorial & Modern Civic Hero Section */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="bg-gradient-to-b from-slate-900 to-emerald-950 text-white rounded-3xl p-8 sm:p-14 shadow-xl border border-emerald-900/50 relative overflow-hidden">
-          <div className="max-w-3xl space-y-6 relative z-10">
-            <div className="inline-flex items-center gap-2 px-3 py-1 bg-emerald-500/10 border border-emerald-500/20 rounded-full text-emerald-300 text-xs font-semibold uppercase tracking-wider">
-              <Cpu className="w-3.5 h-3.5" /> Next-Gen AI Grievance Governance
+        <div className="bg-slate-900 border border-slate-800 rounded-3xl p-6 sm:p-12 lg:p-16 relative overflow-hidden shadow-2xl">
+          {/* Subtle architectural background grid & radial light */}
+          <div className="absolute inset-0 bg-[radial-gradient(#1e293b_1px,transparent_1px)] [background-size:24px_24px] opacity-40"></div>
+          <div className="absolute -top-32 -right-32 w-96 h-96 bg-emerald-900/20 rounded-full blur-3xl pointer-events-none"></div>
+
+          <div className="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
+            {/* Left Column: Editorial Headline & Actions (7 cols) */}
+            <div className="lg:col-span-7 space-y-6">
+              {/* Civic Authority Badge */}
+              <div className="inline-flex items-center gap-2.5 px-3.5 py-1.5 rounded-full bg-slate-800/90 border border-slate-700/80 text-emerald-400 text-xs font-mono font-medium tracking-wide">
+                <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                <span>CENTRALIZED PUBLIC GRIEVANCE NETWORK</span>
+                <span className="text-slate-500">•</span>
+                <span className="text-slate-400">KERALA PILOT</span>
+              </div>
+
+              {/* Title with Strong Editorial Character */}
+              <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white tracking-tight leading-[1.15]">
+                Direct civic accountability, <br className="hidden sm:inline" />
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-teal-300">
+                  from petition to field resolution.
+                </span>
+              </h1>
+
+              {/* Refined Descriptive Subhead */}
+              <p className="text-sm sm:text-base text-slate-300 font-normal leading-relaxed max-w-xl">
+                CivicFlow unites citizens, department field engineers, and the Chief Minister’s Office in a transparent, auditable redressal ecosystem. Powered by Gemini AI triage with strict time-bound service level agreements.
+              </p>
+
+              {/* High-Impact Actions */}
+              <div className="flex flex-wrap items-center gap-3.5 pt-2">
+                <Link
+                  to="/citizen/submit"
+                  className="bg-emerald-600 hover:bg-emerald-500 text-white font-semibold px-6 py-3 rounded-xl shadow-lg shadow-emerald-950/50 transition-all flex items-center gap-2 text-sm"
+                >
+                  <span>Lodge Public Grievance</span>
+                  <ArrowRight className="w-4 h-4" />
+                </Link>
+
+                <Link
+                  to="/track"
+                  className="bg-slate-800/80 hover:bg-slate-800 text-slate-200 hover:text-white border border-slate-700/80 font-semibold px-5 py-3 rounded-xl transition text-sm flex items-center gap-2"
+                >
+                  <span>Public Ref Tracker</span>
+                  <ArrowUpRight className="w-4 h-4 text-slate-400" />
+                </Link>
+              </div>
+
+              {/* Micro Confidence Metrics */}
+              <div className="pt-4 border-t border-slate-800/80 grid grid-cols-3 gap-4 text-left">
+                <div>
+                  <div className="font-mono text-base font-bold text-white">14</div>
+                  <div className="text-[11px] text-slate-400 font-medium">Districts Integrated</div>
+                </div>
+                <div>
+                  <div className="font-mono text-base font-bold text-emerald-400">3–14 Days</div>
+                  <div className="text-[11px] text-slate-400 font-medium">Enforced SLA Rules</div>
+                </div>
+                <div>
+                  <div className="font-mono text-base font-bold text-white">100%</div>
+                  <div className="text-[11px] text-slate-400 font-medium">Auditable History</div>
+                </div>
+              </div>
             </div>
-            <h1 className="text-4xl sm:text-5xl font-extrabold tracking-tight leading-tight">
-              Transparent, Accountable Public Grievance Management
-            </h1>
-            <p className="text-base sm:text-lg text-slate-300 font-normal leading-relaxed">
-              CivicFlow centralizes citizen complaints across public infrastructure, health, water supply and state utilities. Powered by AI triage and monitored directly by the Chief Minister's Office.
-            </p>
-            <div className="flex flex-wrap items-center gap-4 pt-4">
-              <Link
-                to="/citizen/submit"
-                className="bg-emerald-600 hover:bg-emerald-500 text-white font-semibold px-6 py-3 rounded-xl shadow-lg shadow-emerald-900/40 transition flex items-center gap-2 text-sm"
-              >
-                Submit Grievance <ArrowRight className="w-4 h-4" />
-              </Link>
-              <Link
-                to="/track"
-                className="bg-white/10 hover:bg-white/15 text-white border border-white/20 font-semibold px-6 py-3 rounded-xl transition text-sm"
-              >
-                Track by Reference Number
-              </Link>
+
+            {/* Right Column: Governance Architecture Card (5 cols) */}
+            <div className="lg:col-span-5">
+              <div className="bg-slate-800/60 backdrop-blur-md border border-slate-700/70 rounded-2xl p-5 sm:p-6 space-y-4 shadow-xl">
+                <div className="flex items-center justify-between border-b border-slate-700/60 pb-3">
+                  <div className="flex items-center gap-2 text-xs font-mono font-semibold text-slate-300 uppercase tracking-wider">
+                    <Scale className="w-4 h-4 text-emerald-400" />
+                    <span>State Redressal Protocol</span>
+                  </div>
+                  <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-emerald-950/80 text-emerald-300 border border-emerald-800/60">
+                    ACTIVE DESK
+                  </span>
+                </div>
+
+                {/* Workflow Sequence Preview */}
+                <div className="space-y-2.5 text-xs">
+                  <div className="p-2.5 rounded-lg bg-slate-900/80 border border-slate-700/50 flex items-start gap-3">
+                    <div className="w-5 h-5 rounded-full bg-emerald-500/20 text-emerald-400 font-mono font-bold flex items-center justify-center text-[10px] flex-shrink-0 mt-0.5">
+                      1
+                    </div>
+                    <div>
+                      <div className="font-semibold text-slate-200">AI Triage & Categorization</div>
+                      <div className="text-[11px] text-slate-400 mt-0.5">Gemini extracts department routing & urgency priority.</div>
+                    </div>
+                  </div>
+
+                  <div className="p-2.5 rounded-lg bg-slate-900/80 border border-slate-700/50 flex items-start gap-3">
+                    <div className="w-5 h-5 rounded-full bg-emerald-500/20 text-emerald-400 font-mono font-bold flex items-center justify-center text-[10px] flex-shrink-0 mt-0.5">
+                      2
+                    </div>
+                    <div>
+                      <div className="font-semibold text-slate-200">CMO Ministerial Assignment</div>
+                      <div className="text-[11px] text-slate-400 mt-0.5">Directives issued directly to designated executive officers.</div>
+                    </div>
+                  </div>
+
+                  <div className="p-2.5 rounded-lg bg-slate-900/80 border border-slate-700/50 flex items-start gap-3">
+                    <div className="w-5 h-5 rounded-full bg-emerald-500/20 text-emerald-400 font-mono font-bold flex items-center justify-center text-[10px] flex-shrink-0 mt-0.5">
+                      3
+                    </div>
+                    <div>
+                      <div className="font-semibold text-slate-200">On-Site Action-Taken Report</div>
+                      <div className="text-[11px] text-slate-400 mt-0.5">Verified field visits & physical completion documentation.</div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Verification Notice */}
+                <div className="pt-2 text-[11px] text-slate-400 border-t border-slate-700/50 flex items-center justify-between">
+                  <span>CMO Apex Oversight: Verified</span>
+                  <Link to="/how-it-works" className="text-emerald-400 hover:text-emerald-300 font-medium flex items-center gap-1">
+                    Full Protocol <ArrowRight className="w-3 h-3" />
+                  </Link>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -114,7 +210,7 @@ export const Home: React.FC = () => {
         </div>
       </section>
 
-      {/* Demonstration Statistics (Clearly Identified Demonstration Records) */}
+      {/* Demonstration Statistics */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="bg-slate-900 text-white rounded-3xl p-8 sm:p-10 shadow-sm border border-slate-800">
           <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 border-b border-slate-800 pb-4 mb-6">

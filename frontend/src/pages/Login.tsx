@@ -62,21 +62,21 @@ export const Login: React.FC = () => {
           <div className="grid grid-cols-3 gap-2 text-xs">
             <button
               type="button"
-              onClick={() => fillDemoAccount('citizen.rajesh@gmail.com', 'Citizen@123')}
+              onClick={() => fillDemoAccount('citizen.rajesh@gmail.com', 'qwertyuiop1234567890')}
               className="px-2 py-1.5 bg-white border border-emerald-300 rounded text-emerald-800 font-medium hover:bg-emerald-100 text-center"
             >
               Citizen
             </button>
             <button
               type="button"
-              onClick={() => fillDemoAccount('cmo.admin@civicflow.gov.in', 'Admin@123')}
+              onClick={() => fillDemoAccount('cmo.admin@civicflow.gov.in', 'qwertyuiop1234567890')}
               className="px-2 py-1.5 bg-white border border-emerald-300 rounded text-emerald-800 font-medium hover:bg-emerald-100 text-center"
             >
               CMO Admin
             </button>
             <button
               type="button"
-              onClick={() => fillDemoAccount('officer.pwd@civicflow.gov.in', 'Officer@123')}
+              onClick={() => fillDemoAccount('officer.pwd@civicflow.gov.in', 'qwertyuiop1234567890')}
               className="px-2 py-1.5 bg-white border border-emerald-300 rounded text-emerald-800 font-medium hover:bg-emerald-100 text-center"
             >
               PWD Officer
