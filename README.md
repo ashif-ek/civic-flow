@@ -9,6 +9,21 @@ An autonomous, end-to-end recruitment machine-test assignment delivering a funct
 - **Frontend Application (Vercel)**: [https://civicflow-v1.vercel.app/](https://civicflow-v1.vercel.app/)
 - **Backend API & Swagger Documentation (Railway)**: [https://civicflow-backend-production.up.railway.app/api/docs/](https://civicflow-backend-production.up.railway.app/api/docs/)
 - **ReDoc Interactive Reference**: [https://civicflow-backend-production.up.railway.app/api/redoc/](https://civicflow-backend-production.up.railway.app/api/redoc/)
+- **Live Streamable Demo Video**: [https://civicflow-v1.vercel.app/demo-walkthrough.mp4](https://civicflow-v1.vercel.app/demo-walkthrough.mp4)
+
+---
+
+## 🎬 Video Demonstration Walkthrough
+
+Watch the full end-to-end walkthrough video demonstrating citizen registration, grievance submission, Google Gemini AI triage, CMO admin department & officer routing, field officer action-taken reporting, resolution approval, and citizen feedback:
+
+https://github.com/ashif-ek/civic-flow/raw/main/frontend/public/demo-walkthrough.mp4
+
+> **Direct View / Download**: [Click here to view or download `demo-walkthrough.mp4`](./frontend/public/demo-walkthrough.mp4)
+
+<video src="./frontend/public/demo-walkthrough.mp4" controls width="100%" poster="./frontend/public/favicon.svg">
+  Your browser does not support the video tag. You can view the video directly at <a href="https://civicflow-v1.vercel.app/demo-walkthrough.mp4">demo-walkthrough.mp4</a>.
+</video>
 
 ---
 
