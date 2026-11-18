@@ -51,7 +51,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-ROOT_URLCONF = 'civicflow_backend.urls'
+ROOT_URLCONF = 'config.urls'
 
 TEMPLATES = [
     {
@@ -69,7 +69,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'civicflow_backend.wsgi.application'
+WSGI_APPLICATION = 'config.wsgi.application'
 
 # Database
 # Use PostgreSQL if DATABASE_URL is set, otherwise fallback to SQLite for local development
