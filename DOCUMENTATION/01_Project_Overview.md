@@ -2,6 +2,11 @@
 
 ## CivicFlow — AI-Powered Public Grievance Management Platform
 
+- **Frontend Application (Vercel)**: [https://civicflow-v1.vercel.app/](https://civicflow-v1.vercel.app/)
+- **Backend API & Swagger Documentation (Railway)**: [https://civicflow-backend-production.up.railway.app/api/docs/](https://civicflow-backend-production.up.railway.app/api/docs/)
+
+---
+
 CivicFlow is a centralized, end-to-end public grievance redressal portal. It allows citizens to lodge civic complaints regarding public infrastructure, health, water supply, electricity, transport, and municipal services across Kerala's 14 districts.
 
 The application features:

@@ -4,6 +4,13 @@ An autonomous, end-to-end recruitment machine-test assignment delivering a funct
 
 ---
 
+## 🌐 Live Hosted Application Links
+
+- **Frontend Application (Vercel)**: [https://civicflow-v1.vercel.app/](https://civicflow-v1.vercel.app/)
+- **Backend API & Swagger Documentation (Railway)**: [https://civicflow-backend-production.up.railway.app/api/docs/](https://civicflow-backend-production.up.railway.app/api/docs/)
+
+---
+
 ### Important Notice
 > **Recruitment Prototype Disclaimer**: This project is an independent demonstration created for recruitment evaluation. It is not officially affiliated with or endorsed by the Government of Kerala.
 
